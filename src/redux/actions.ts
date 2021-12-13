@@ -1,7 +1,7 @@
-import { cashReducer } from './reducers/cashReducer';
 
-
-export const action1 = (value: any) => ({ type: 'cashReducer/NEW_ARRAY_CARDS'} as const);
+export const changeBalanceMake = (balance: number) => ({ type: 'cashReducer/CHANGE_BALANCE_MAKE', balance} as const);
+export const changeBalanceGet = (balance: number) => ({ type: 'cashReducer/CHANGE_BALANCE_GET', balance} as const);
 
 export type ActionTypes =
-        | ReturnType<typeof action1>
+        | ReturnType<typeof changeBalanceMake>
+        | ReturnType<typeof changeBalanceGet>

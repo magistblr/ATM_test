@@ -1,3 +1,18 @@
-.wrapper {
-  text-align: center;
+.wrapper{
+  height: 100%;
+  background-color: rgb(216, 216, 216);
+}
+
+.wrapper_outer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrapper_inner{
+  width: 700px;
+  height: 700px;
+  border: 1px solid black;
+  margin-top: 50px;
+  padding: 30px;
 }

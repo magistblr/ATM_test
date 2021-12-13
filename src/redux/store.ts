@@ -6,7 +6,7 @@ import { cashReducer } from "./reducers/cashReducer";
 export type StateType = ReturnType<typeof rootReducer>
 
 
-export const rootReducer = combineReducers({
+const rootReducer = combineReducers({
   cashPage: cashReducer,
 });
 

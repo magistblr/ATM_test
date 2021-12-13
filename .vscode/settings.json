@@ -1,5 +1,4 @@
 {
-  "cSpell.words": [
-    "Выдать"
-  ]
+  "editor.unicodeHighlight.ambiguousCharacters": false,
+  "javascript.preferences.jsxAttributeCompletionStyle": "braces"
 }

@@ -1,0 +1,48 @@
+.dropDown{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 115px;
+}
+
+.dropDown__items-wrapper{
+  position: relative;
+  margin-top: 5px;
+  min-width: 125px;
+}
+
+.dropDown__items{
+  width: 100%;
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  transform: translateX(-50%);
+  list-style-type: none;
+  margin: 0;
+  list-style: none;
+  transition: 0.5s;
+  opacity: 1;
+  border-radius: 5px;
+  padding-inline-start: 0px;
+  text-align: center;
+}
+
+.dropDown__items_active{
+  z-index: -1;
+  opacity: 0;
+  transition: 0.5s;
+}
+
+.dropDown__item{
+  display: flex;
+  align-items: center;
+  padding: 0px 16px;
+  min-height: 48px;
+  cursor: pointer;
+  background-color: #ffffff;
+}
+
+.dropDown__item:hover{
+  background-color: rgb(173, 173, 173);
+}
