@@ -1,0 +1,18 @@
+.wrapper{
+  margin: 0 auto;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 220px;
+  border: 1px solid;
+  padding: 10px;
+}
+
+.wrapper div:nth-child(10){
+  width: 66%;
+}
+
+.num{
+  display: inline-block;
+}

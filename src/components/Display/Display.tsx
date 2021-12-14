@@ -1,6 +1,7 @@
 import React, { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { changeBalanceMake, changeBalanceGet } from '../../redux/actions';
+import { changeInput, changeBalanceGet, changeError } from '../../redux/actions';
+import { billsType } from '../../redux/reducers/cashReducer';
 import { StateType } from '../../redux/store';
 import { Button } from '../Button/Button';
 import s from './Display.module.css';
@@ -14,14 +15,11 @@ export const Display = () => {
 
 
   const text = useSelector<StateType, string>(state => state.cashPage.text)
-  const balance = useSelector<StateType, number>(state => state.cashPage.balance)
+  const bills = useSelector<StateType, billsType>(state => state.cashPage.bills)
+  const error = useSelector<StateType, boolean>(state => state.cashPage.error)
 
   const changeGiveOut = () => {
     setGiveOut(true)
-  }
-
-  const changeWithdraw = () => {
-    setWithdraw(true)
   }
 
   const changeGiveOutWithdraw = () => {
@@ -29,16 +27,23 @@ export const Display = () => {
     setWithdraw(false)
   }
 
+  const billsArr = Object.keys(bills).reverse()
+  const billsArr1 = Object.values(bills).reverse()
+  console.log(billsArr);
+  
   return (
     <div className={s.wrapper}>
       <div className={s.wrapper_inner}>
         <div className={s.btn_help}>
-          <Button type='success' callback={() => setBalanceActive(true)}>Показать остаток</Button>
-          {balanceActive && <div>{balance}</div>}
+          <Button type='success' callback={() => setBalanceActive(!balanceActive)}>{balanceActive ? "Скрыть" : "Показать остаток"}</Button>
+          {balanceActive && <div className={s.bills_wrapper}>
+                              <div>{billsArr.map((elem, index) => <div key={index}>{elem}</div>)}</div>
+                              <div>{billsArr1.map((elem, index) => <div key={index}> = {elem}</div>)}</div>
+                            </div>
+          }
         </div>
 
         {giveOut && !withdraw && <Input changeBalance={changeBalanceGet} textBtn={"Снять"}/>}
-        {!giveOut && withdraw && <Input changeBalance={changeBalanceMake} textBtn={"Внести"}/>}
 
         {!giveOut && !withdraw &&
           <>
@@ -51,7 +56,6 @@ export const Display = () => {
 
             <div className={s.buttons}>
               <Button type='success' callback={changeGiveOut}>Снять</Button>
-              <Button type='success' callback={changeWithdraw}>Внести</Button>
             </div>
           </>
         }
@@ -68,54 +72,57 @@ type InputType = {
 
 export const Input: React.FC<InputType> = ({textBtn, changeBalance}) => {
 
-  const [value, setValue] = useState("")
 
   const dispatch = useDispatch()
+  const input = useSelector<StateType, string>(state => state.cashPage.input)
+  const error = useSelector<StateType, boolean>(state => state.cashPage.error)
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.currentTarget.value)
+    dispatch(changeInput(e.currentTarget.value))
   }
 
 
   const addItemHandler = () => {
-    const base = value.split(" ")
-    if (value.trim() !== '') {
-        dispatch(changeBalance(+base))
-        setValue('');
+    const base = input.split(" ")
+      if(error){
+        if (input.trim() !== '') {
+          dispatch(changeBalance(+base))
+          dispatch(changeInput(''))
+      }
     }
   }
 
   const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.charCode === 13) {
+    if (e.code === "Enter") {
         addItemHandler();
     }
   }
 
+  useEffect(() => {
+    const validInput = /^-?\d+(\.\d{2})?$/
 
-//   useEffect(() => {
-//     const validInput = /[0-9]/
-
-//     if (!validInput.test(text)) {
-//         setInvalid(true);
-//     }
-//     if (validInput.test(text)) {
-//         setInvalid(false);
-//     }
-// }, [text])
+    if (input.length === 0) return
+    if (!validInput.test(input)) {
+        dispatch(changeError(true));
+    }
+    if (validInput.test(input)) {
+      dispatch(changeError(false));
+    }
+  }, [input])
 
 
   return (
     <form className={s1.wrapper}>
       <p>Введите сумму</p>
-      <input  className={s1.input}
+      <input  className={error ? `${s1.error} ${s1.input}` : s1.input}
               title="Разрешено использовать только цифры и '.'"
-              type="number"
+              type="text"
               onChange={onChangeHandler}
               onKeyPress={onKeyPressHandler}
-              value={value}
-              name='message'
+              value={input}
               />
-      <Button callback={addItemHandler}>{textBtn}</Button>
+      {error && <span>Пожалуйста введите сумму в формате '1234.29' или '1234'</span>}
+      <Button callback={addItemHandler} disabled={error}>{textBtn}</Button>
     </form>
   )
 }
