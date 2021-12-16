@@ -1,6 +1,6 @@
-import React, { KeyboardEvent } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux';
-import { changeInputNumPad } from '../../redux/actions';
+import { changeInputNumPad, changeInput } from '../../redux/actions';
 import { Button } from '../Button/Button';
 import s from './NumPad.module.css';
 
@@ -8,8 +8,6 @@ export const NumPad = () => {
 
   const dispatch = useDispatch()
 
-
-  
   const numbers = [
     {id: 1, value: '1'},
     {id: 2, value: '2'},
@@ -20,20 +18,23 @@ export const NumPad = () => {
     {id: 7, value: '7'},
     {id: 8, value: '8'},
     {id: 9, value: '9'},
-    {id: 10, value: '0'},
-    {id: 11, value: '.'},
+    {id: 10, value: 'C'},
+    {id: 11, value: '0'},
+    {id: 12, value: '.'},
   ]
-  console.log(numbers[0].value);
 
 
-  const filter = (id: number, value: string) => {
-    return numbers.filter(item => item.id === id ? dispatch(changeInputNumPad(value)) : "")
+  const filterInputValue = (id: number, value: string) => {
+    if(id === 10){
+      dispatch(changeInput(""))
+    }
+    return numbers.filter(item => item.id === id && id != 10 ? dispatch(changeInputNumPad(value)) : "")
   }
 
 
   return (
     <div className={s.wrapper}>
-      {numbers.map(item => <div className={s.num}><Button key={item.id}  block callback={() => filter(item.id, item.value)}>{item.value}</Button></div>)}
+      {numbers.map(item => <div key={item.id} className={s.num}><Button block callback={() => filterInputValue(item.id, item.value)}>{item.value}</Button></div>)}
     </div>
   )
 }

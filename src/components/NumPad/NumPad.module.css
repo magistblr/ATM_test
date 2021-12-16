@@ -9,9 +9,6 @@
   padding: 10px;
 }
 
-.wrapper div:nth-child(10){
-  width: 66%;
-}
 
 .num{
   display: inline-block;

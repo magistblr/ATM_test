@@ -35,8 +35,23 @@
   transform: translate(50%, -50%);
 }
 
-.bills_wrapper{
+.wrapper_bills{
   display: flex;
   justify-content: space-around;
-  width: 100px;
+  width: 350px;
+  border: 1px solid;
+  padding: 10px;
+  margin-top: 10px
+}
+
+.bills{
+  display: flex;
+  justify-content: space-around;
+  width: 150px;
+  border: 1px solid;
+  padding: 5px
+}
+
+.container{
+  display: block
 }

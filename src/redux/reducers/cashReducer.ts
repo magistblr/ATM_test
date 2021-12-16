@@ -2,10 +2,11 @@ import { ActionTypes } from "../actions"
 
 export type cashReducerType = {
   bills: billsType
-  text: string
-  balance: number
   input: string
   error: boolean
+  issued: issuedType
+  notIssued: issuedType
+  query: string
 }
 
 export type billsType = {
@@ -16,6 +17,16 @@ export type billsType = {
   "1000":number
   "500": number
   "50": number
+}
+
+export type issuedType = {
+  "200"?: number
+  "100"?: number
+  "5000"?:number
+  "2000"?:number
+  "1000"?:number
+  "500"?: number
+  "50"?: number
 }
 
 
@@ -29,22 +40,29 @@ const initialState: cashReducerType = {
     "500": 1000, //500 000
     "50": 10000 //500 000
   },
-  text: "Добро пожаловать",
+  issued: {},
+  notIssued: {},
   input: "",
-  balance: 0,
-  error: false
+  error: false,
+  query: ""
 }
 
 export const cashReducer = (state: cashReducerType = initialState, action: ActionTypes): cashReducerType => {
   switch (action.type) {
-      case 'cashReducer/CHANGE_BALANCE_GET':
-          return {...state, balance: state.balance - action.balance}
+      case 'cashReducer/CHANGE_BILLS_RESTART':
+          return {...state, bills: {...state.bills, ...action.bills}, issued: {}, input: "", error: false}
+      case 'cashReducer/CHANGE_BILLS':
+          return {...state, bills: {...state.bills, ...action.bills}}
       case 'cashReducer/CHANGE_INPUT':
           return {...state, input: action.input}
       case 'cashReducer/CHANGE_INPUT_NUMPAD':
           return {...state, input: state.input + action.input}
       case 'cashReducer/CHANGE_ERROR':
           return {...state, error: action.error}
+      case 'cashReducer/CHANGE_ISSUED':
+          return {...state, issued: {...action.issued}}
+      case 'cashReducer/CHANGE_QUERY':
+          return {...state, query: action.query}
       default:
           return state
   }
