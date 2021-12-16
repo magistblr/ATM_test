@@ -25,6 +25,10 @@ export const Display = () => {
     setIssued(false)
     setRemainder(false)
   }
+  console.log("balanceActive",balanceActive);
+  console.log("help",help);
+  console.log("issued",issued);
+  console.log("remainder",remainder);
 
 
 
@@ -39,7 +43,7 @@ export const Display = () => {
     }
     return (
           <div className={s.container}>
-            <div>{text}</div>
+            <div className={s.bills_text}>{text}</div>
             <div className={s.bills}>
               <div>{createKeys({...value}).map((elem, index) => <div key={index}>{elem}</div>)}</div>
               <div>{createValues({...value}).map((elem, index) => <div key={index}> = {elem}</div>)}</div>
@@ -73,6 +77,7 @@ export const Display = () => {
                                 setIssued={setIssued}
                                 setRemainder={setRemainder}
                                 setBalanceActive={setBalanceActive}
+                                help={help}
                                 />
         }
       </div>

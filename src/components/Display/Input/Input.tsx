@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { ChangeEvent, KeyboardEvent, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { changeBills, changeError, changeInput, changeIssued, changeQuery } from "../../../redux/actions"
@@ -15,10 +15,11 @@ type InputType = {
   setIssued: (value: boolean) => void
   setRemainder: (value: boolean) => void
   setBalanceActive: (value: boolean) => void
+  help: boolean
 }
 
 
-export const Input: React.FC<InputType> = React.memo(({setHelp, setIssued, setRemainder, setBalanceActive}) => {
+export const Input: React.FC<InputType> = React.memo(({setHelp, setIssued, setRemainder, setBalanceActive,help}) => {
 
 
   const dispatch = useDispatch()
@@ -27,19 +28,16 @@ export const Input: React.FC<InputType> = React.memo(({setHelp, setIssued, setRe
   const stateBills = useSelector<StateType, billsType>(state => state.cashPage.bills)
   const query = useSelector<StateType, string>(state => state.cashPage.query)
 
-
   const get = useGet(query, stateBills)
   const out = useBillsState(get, stateBills)
 
-  console.log(stateBills);
+  console.log(get);
   console.log(out);
-  
+
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(changeInput(e.currentTarget.value))
   }
-
-
 
   const addItemHandler = () => {
     if(!error){
@@ -50,15 +48,28 @@ export const Input: React.FC<InputType> = React.memo(({setHelp, setIssued, setRe
         if(out){
           dispatch(changeBills(out))
         }
-        dispatch(changeQuery(input))
         dispatch(changeInput(''))
       }
     }
+    dispatch(changeQuery(input))
     setBalanceActive(false)
     setHelp(true)
     setIssued(true)
     setRemainder(true)
   }
+
+  useEffect(() => {
+    console.log("сработал");
+    if(!help){
+
+      dispatch(changeInput(''))
+    }
+    if(!help && get){
+
+      dispatch(changeQuery(''))
+    }
+  }, [help, get])
+
 
   const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Enter") {
@@ -67,7 +78,7 @@ export const Input: React.FC<InputType> = React.memo(({setHelp, setIssued, setRe
   }
 
   useEffect(() => {
-    const validInput = /^-?\d+(\.\d{2})?$/
+    const validInput = /^\d+(\.\d{2})?$/
 
     if (input.length === 0) return
     if (!validInput.test(input)) {

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
     const [get, setGet] = useState()
     //@ts-ignore
     useEffect(() => {
+
       //@ts-ignore
       function collect(amount, nominals){
         if(amount === 0) return {}
@@ -43,6 +44,7 @@ import { useEffect, useState } from 'react';
 
   //@ts-ignore
   export function useBillsState(value1, value2){
+
     const [out, setOut] = useState()
 
     useEffect(() => {
